@@ -70,10 +70,12 @@ test('each consecutive act pair overlaps somewhere', () => {
 
 test('gates stay within [0,1]', () => {
   const g = {};
+  // boost is a brightness multiplier, not a gate — intentionally exceeds 1
+  const gateKeys = GATE_KEYS.filter((k) => k !== 'boost');
   for (let i = 0; i <= 1000; i++) {
     const sp = i / 1000;
     computeGates(sp, sp, g);
-    for (const k of GATE_KEYS) {
+    for (const k of gateKeys) {
       assert.ok(g[k] >= 0 && g[k] <= 1, `${k} out of [0,1] at sp=${sp}: ${g[k]}`);
     }
   }

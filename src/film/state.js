@@ -57,7 +57,7 @@ export function computeGates(sp, p, g) {
   // act 5 lifts the fog so the dawn at depth reads, then the wipe closes it
   g.fogFar =
     lerp(lerp(120, 160, smoothstep(0.74, 0.86, sp)), 34, smoothstep(0.84, 0.985, p));
-  g.fogNear = lerp(10, 3, g.wipe);
+  g.fogNear = lerp(10, 4, g.wipe);
 }
 
 function initGates() {

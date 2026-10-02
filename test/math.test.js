@@ -62,7 +62,8 @@ test('gateWin rises then falls', () => {
   assert.equal(gateWin(0, 0, 0.2, 0.8, 1), 0);
   assert.equal(gateWin(0.2, 0, 0.2, 0.8, 1), 1);
   assert.equal(gateWin(0.5, 0, 0.2, 0.8, 1), 1);
-  assert.equal(gateWin(0.8, 0, 0.2, 0.8, 1), 0);
+  // at v=c (0.8) the fall has not started yet (smoothstep(c,d,c)=0), so gate=1
+  assert.equal(gateWin(0.8, 0, 0.2, 0.8, 1), 1);
   assert.equal(gateWin(1, 0, 0.2, 0.8, 1), 0);
 });
 
@@ -73,7 +74,8 @@ test('gateWin with a never-fall sentinel (c === d) never returns NaN', () => {
     assert.ok(!Number.isNaN(g), `NaN at sp=${sp}`);
     assert.ok(g >= 0 && g <= 1, `out of range at sp=${sp}: ${g}`);
   }
-  assert.equal(gateWin(0.78, 0.74, 0.82, 9, 9), 1);
+  // at v=0.82 (end of rise) the gate is fully open; never-fall means it stays open
+  assert.equal(gateWin(0.82, 0.74, 0.82, 9, 9), 1);
 });
 
 test('easeOutCubic and easeInOutCubic hit endpoints', () => {
@@ -92,10 +94,12 @@ test('hash1 stays in [0,1)', () => {
 });
 
 test('shortestArc returns the shorter way around the circle', () => {
-  assert.equal(shortestArc(0.1), 0.1);
-  assert.equal(shortestArc(0.6), -0.4);
-  assert.equal(shortestArc(-0.6), 0.4);
-  assert.equal(shortestArc(0.5), -0.5); // either way is 0.5
+  const approx = (a, b) => Math.abs(a - b) < 1e-10;
+  assert.ok(approx(shortestArc(0.1), 0.1));
+  assert.ok(approx(shortestArc(0.6), -0.4));
+  assert.ok(approx(shortestArc(-0.6), 0.4));
+  // 0.5 is equidistant either way; implementation picks -0.5
+  assert.ok(approx(shortestArc(0.5), -0.5));
   for (let d = -2; d <= 2; d += 0.01) {
     const a = shortestArc(d);
     assert.ok(a >= -0.5 && a <= 0.5, `out of range: ${a}`);
@@ -103,9 +107,10 @@ test('shortestArc returns the shorter way around the circle', () => {
 });
 
 test('hueDist is the circular distance', () => {
-  assert.equal(hueDist(0.1, 0.2), 0.1);
-  assert.equal(hueDist(0.9, 0.1), 0.2);
-  assert.equal(hueDist(0.5, 0.5), 0);
+  const approx = (a, b) => Math.abs(a - b) < 1e-10;
+  assert.ok(approx(hueDist(0.1, 0.2), 0.1));
+  assert.ok(approx(hueDist(0.9, 0.1), 0.2));
+  assert.ok(approx(hueDist(0.5, 0.5), 0));
 });
 
 test('rgbToHsl / hslToRgb round-trip', () => {
