@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+dist/
+.vite/
+
+# VCS
+.git/
+
+# Binary Assets
+*.woff
+*.woff2
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.webp
+*.mp3
+*.mp4
+*.wav
+*.ogg
+
+# OS/IDE Noise
+.DS_Store
+.idea/
+.vscode/
+*.log

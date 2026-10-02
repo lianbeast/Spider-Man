@@ -1,0 +1,166 @@
+:root {
+  --raw-ink-950: #150406;
+  --raw-ink-900: #1e070a;
+  --raw-ink-800: #2c0e13;
+  --raw-ink-700: #431a20;
+  --raw-bone-50: #f2f3f5;
+  --raw-bone-400: #9a8a8d;
+  --raw-bone-500: #75666a;
+  --raw-scarlet-500: #e0202b;
+  --raw-scarlet-300: #ff5d64;
+  --raw-cobalt-500: #2b4fd0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--raw-ink-950);
+  color: var(--raw-bone-50);
+  overflow-x: clip; /* no horizontal overflow at 390px, belt */
+}
+
+#track {
+  height: 2200vh;
+  position: relative;
+}
+
+#stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden; /* brace: nothing inside can widen the page */
+  background: var(--raw-ink-950);
+}
+
+#stage canvas {
+  display: block;
+  pointer-events: none !important; /* scroll passes through; r3f would set touch-action: none */
+  touch-action: pan-y !important;
+}
+
+/* ---- overlays ---------------------------------------------------------- */
+
+.ov {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  visibility: hidden;
+  display: grid;
+  padding: 0 6vw;
+  perspective: 900px;
+}
+
+.ov .l {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+.t-title {
+  margin: 0;
+  font-family: 'Archivo Black', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 12.5vw, 10.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.015em;
+  text-align: center;
+  color: var(--raw-bone-50);
+}
+
+.t-line {
+  display: block;
+}
+
+.sp {
+  width: 0.5em;
+}
+
+/* opening title: sits low-left, leaves back-to-front blurring as it goes */
+.ov-open {
+  place-items: end start;
+  padding-bottom: 11vh;
+}
+
+/* phrases: bottom-centre, out of the overhead action */
+.ov-phrase {
+  place-items: end center;
+  padding-bottom: 13vh;
+}
+
+.t-phrase {
+  margin: 0;
+  font-family: 'Archivo Black', system-ui, sans-serif;
+  font-size: clamp(1.2rem, 4.2vw, 3.1rem);
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  white-space: nowrap;
+  color: var(--raw-bone-50);
+}
+
+/* closing card: arrives front-to-back over the wipe, resolving out of blur */
+.ov-close {
+  place-items: center;
+}
+
+.card {
+  display: grid;
+  justify-items: center;
+  gap: 6vh;
+}
+
+.btn {
+  pointer-events: auto; /* only buttons re-enable pointer events */
+  font-family: 'Archivo Black', system-ui, sans-serif;
+  font-size: clamp(0.78rem, 1.6vw, 1rem);
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  padding: 1.1em 2.4em;
+  background: transparent;
+  color: var(--raw-bone-50);
+  border: 1px solid var(--raw-bone-400);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: var(--raw-bone-50);
+  color: var(--raw-ink-900);
+  border-color: var(--raw-bone-50);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--raw-bone-50);
+  outline-offset: 3px;
+}
+
+/* the closing wipe: a scarlet field sweeping over the frame, on real p */
+.wipe {
+  position: absolute;
+  inset: -2% -14%;
+  z-index: 3;
+  transform: translate3d(-104%, 0, 0);
+  visibility: hidden;
+  pointer-events: none;
+  will-change: transform;
+  background: radial-gradient(
+    120% 95% at 50% 74%,
+    var(--raw-scarlet-300) 0%,
+    var(--raw-scarlet-500) 32%,
+    var(--raw-ink-700) 74%,
+    var(--raw-ink-900) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
