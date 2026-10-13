@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@fontsource/archivo-black": "^5.2.5",
@@ -16,8 +17,12 @@
     "react-dom": "^19.1.0",
     "three": "^0.180.0"
   },
+  "homepage": "https://lianbeast.github.io/Spider-Man",
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "gh-pages": "^6.2.0",
+    "playwright": "^1.64.0",
     "vite": "^7.1.0"
   }
 }
